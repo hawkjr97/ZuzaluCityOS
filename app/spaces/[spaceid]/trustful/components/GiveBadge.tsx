@@ -8,6 +8,7 @@ import {
   Box,
   Button,
   Card,
+  ChakraProvider,
   Divider,
   Flex,
   Input,
@@ -52,6 +53,7 @@ import { config } from '@/context/WalletContext';
 import { TheHeader } from './TheHeader';
 import { TheFooterNavbar } from './TheFooterNavbar';
 import toast from 'react-hot-toast';
+import chakraTheme from '@/theme/lib/chakra-ui';
 
 export enum GiveBadgeStepAddress {
   INSERT_ADDRESS = 'INSERT_ADDRESS',
@@ -63,7 +65,7 @@ export const GiveBadge = () => {
   const { address, chainId } = useAccount();
   const { push } = useRouter();
   const unwatch = watchAccount(config, {
-    onChange() {},
+    onChange() { },
   });
   const {
     addressStep,
@@ -239,12 +241,12 @@ export const GiveBadge = () => {
   // Changes the continue arrow color based on the status of a valid input address
   const iconColor =
     (inputAddress && isAddress(inputAddress)) ||
-    (badgeInputAddress && isAddress(badgeInputAddress?.address))
+      (badgeInputAddress && isAddress(badgeInputAddress?.address))
       ? 'text-[#000000  ]'
       : 'text-[#F5FFFFB2]';
   const iconBg =
     (inputAddress && isAddress(inputAddress)) ||
-    (badgeInputAddress && isAddress(badgeInputAddress?.address))
+      (badgeInputAddress && isAddress(badgeInputAddress?.address))
       ? 'bg-[#B1EF42B2]'
       : 'bg-[#37383A]';
 
@@ -412,6 +414,15 @@ export const GiveBadge = () => {
             {villagerAttestationCount !== null ? (
               <>
                 <TheHeader />
+                <div
+                  style={{
+                    height: '1px',
+                    backgroundColor: '#fff',
+                    width: '100%',
+                    margin: '16px 0',
+                    opacity: '0.2'
+                  }}
+                />
                 <Box
                   className="p-6 sm:px-[60px] sm:py-[80px] flex flex-col w-full"
                   gap={8}
@@ -423,7 +434,8 @@ export const GiveBadge = () => {
                     <Flex className="gap-4 pb-4 justify-start items-center">
                       <UserIcon className="text-[#B1EF42]" />
                       <Input
-                        className="text-black text-base font-normal leading-snug border-none w-[40%] "
+                        className=" text-base font-normal leading-snug w-[40%] "
+                        style={{ border: 'none' }}
                         placeholder="Insert address or ENS"
                         focusBorderColor={'#F5FFFF1A'}
                         value={inputAddress}
@@ -460,7 +472,9 @@ export const GiveBadge = () => {
                     </button>
                   </Flex>
                 </Box>
-                <TheFooterNavbar />
+                <Box className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full items-center">
+                  <TheFooterNavbar />
+                </Box>
               </>
             ) : (
               <Box flex={1} className="flex justify-center items-center">
@@ -533,7 +547,7 @@ export const GiveBadge = () => {
                     </Text>
                     <Select
                       placeholder="Select option"
-                      className="flex text-black opacity-70 text-sm font-normal leading-tight"
+                      className="flex text-white opacity-70 text-sm font-normal leading-tight"
                       color="white"
                       onChange={handleBadgeSelectChange}
                     >
@@ -551,7 +565,8 @@ export const GiveBadge = () => {
                   <Flex className="gap-4 pb-4 justify-start items-center">
                     <CommentIcon />
                     <Textarea
-                      className="text-black text-base font-normal leading-snug border-none"
+                      className=" text-base font-normal leading-snug"
+                      style={{ border: 'none' }}
                       placeholder={
                         inputBadge && inputBadge.title === 'Check-out'
                           ? `Please refer the UID of the check-in badge`
@@ -590,6 +605,7 @@ export const GiveBadge = () => {
             <Box className="px-6 py-4 sm:px-[60px] w-full">
               <Button
                 className="w-full px-6 py-4 bg-[#B1EF42] text-black rounded-lg"
+                style={{ backgroundColor: '#B1EF42' }}
                 _hover={{ bg: '#B1EF42' }}
                 _active={{ bg: '#B1EF42' }}
                 isLoading={loading}
@@ -698,8 +714,10 @@ export const GiveBadge = () => {
   };
 
   return (
-    <Flex flexDirection="column" minHeight="100vh">
-      {renderStepContent(addressStep)}
-    </Flex>
+    <ChakraProvider theme={chakraTheme}>
+      <Flex flexDirection="column" maxHeight="10vh" minHeight="10vh">
+        {renderStepContent(addressStep)}
+      </Flex>
+    </ChakraProvider>
   );
 };
